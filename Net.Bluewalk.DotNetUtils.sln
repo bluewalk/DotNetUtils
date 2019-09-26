@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2019
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Net.Bluewalk.DotNetUtils", "Net.Bluewalk.DotNetUtils\Net.Bluewalk.DotNetUtils.csproj", "{45B21358-C361-4282-85BE-CA3AE53E5737}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{45B21358-C361-4282-85BE-CA3AE53E5737}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45B21358-C361-4282-85BE-CA3AE53E5737}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45B21358-C361-4282-85BE-CA3AE53E5737}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45B21358-C361-4282-85BE-CA3AE53E5737}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E1108B27-AB5A-43CC-8E9C-C88B7A3D7C2F}
+	EndGlobalSection
+EndGlobal
