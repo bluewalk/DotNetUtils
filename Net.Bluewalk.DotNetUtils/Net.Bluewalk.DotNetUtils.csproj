@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net45;net46;net47</TargetFrameworks>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Bluewalk</Authors>
+    <Company>Bluewalk</Company>
+    <Description>.NET Standard library containing handy extensions</Description>
+    <Copyright>Copyright © 2019 Bluewalk</Copyright>
+    <PackageProjectUrl>https://github.com/bluewalk/DotNetUtils</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/bluewalk/DotNetUtils</RepositoryUrl>
+    <PackageTags>dotnet .net core utils</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryType>Git</RepositoryType>
+    <PackageReleaseNotes>* Initial .NET Standard release</PackageReleaseNotes>
+    <Version>2019.9.26.1</Version>
+    <AssemblyVersion>2019.9.26.1</AssemblyVersion>
+    <FileVersion>2019.9.26.1</FileVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+  </ItemGroup>
+
+  <!-- .NET Standard 2.0 references, compilation flags and build options -->
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
+    <DefineConstants>NETCORE;NETSTANDARD;NETSTANDARD2_0</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net45'">	
+    <Reference Include="System.Web" />
+  </ItemGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net45'">
+    <DefineConstants>NET45;NETFULL</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net46'">	
+    <Reference Include="System.Web" />
+  </ItemGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net46'">
+    <DefineConstants>NET46;NETFULL</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net47'">	
+    <Reference Include="System.Web" />
+  </ItemGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net47'">
+    <DefineConstants>NET47;NETFULL</DefineConstants>
+  </PropertyGroup>
+</Project>
