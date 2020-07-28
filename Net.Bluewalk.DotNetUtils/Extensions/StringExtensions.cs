@@ -350,5 +350,32 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         {
             return string.IsNullOrEmpty(str) ? @default : str;
         }
+
+        /// <summary>
+        /// Check if a string is only digits
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static bool IsDigitsOnly(this string s)
+        {
+            var len = s.Length;
+            for (var i = 0; i < len; ++i)
+            {
+                var c = s[i];
+                if (c < '0' || c > '9')
+                    return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Get only digits from a string
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static string GetDigits(this string s)
+        {
+            return Regex.Replace(s, @"[^\d]", string.Empty);
+        }
     }
 }

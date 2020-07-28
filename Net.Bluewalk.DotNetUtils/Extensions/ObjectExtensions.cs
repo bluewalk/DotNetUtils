@@ -2,6 +2,9 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.IO;
+using System.Linq;
+using System.Runtime.Serialization;
+using System.Security.Cryptography;
 using System.Xml;
 using System.Xml.Serialization;
 using Formatting = Newtonsoft.Json.Formatting;
@@ -62,5 +65,73 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         {
             return string.IsNullOrEmpty(str) ? @default : str;
         }
+
+
+        #region Hashing
+
+        /// <summary>
+        /// Generate MD5 hash of object
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <returns></returns>
+        public static string GetMD5Hash(this object instance)
+        {
+            return instance.GetHash<MD5CryptoServiceProvider>();
+        }
+
+        /// <summary>
+        /// Generate SHA1 hash of object
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <returns></returns>
+        public static string GetSHA1Hash(this object instance)
+        {
+            return instance.GetHash<SHA1CryptoServiceProvider>();
+        }
+
+        /// <summary>
+        /// Generate has of privided algorithm for this object
+        /// </summary>
+        /// <typeparam name="T">HashAlgorithm</typeparam>
+        /// <param name="instance"></param>
+        /// <returns></returns>
+        public static string GetHash<T>(this object instance) where T : HashAlgorithm, new()
+        {
+            var cryptoServiceProvider = new T();
+            return ComputeHash(instance, cryptoServiceProvider);
+        }
+
+        /// <summary>
+        /// Generates keyed hash, similar to GetHash only it uses a key to generate hash
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="instance"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static string GetKeyedHash<T>(this object instance, byte[] key) where T : KeyedHashAlgorithm, new()
+        {
+            var cryptoServiceProvider = new T { Key = key };
+            return ComputeHash(instance, cryptoServiceProvider);
+        }
+
+        /// <summary>
+        /// Private function to compute hash of provided cryptoServiceProvider
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="instance"></param>
+        /// <param name="cryptoServiceProvider"></param>
+        /// <returns></returns>
+        private static string ComputeHash<T>(object instance, T cryptoServiceProvider) where T : HashAlgorithm, new()
+        {
+            var serializer = new DataContractSerializer(instance.GetType());
+            using (var memoryStream = new MemoryStream())
+            {
+                serializer.WriteObject(memoryStream, instance);
+                cryptoServiceProvider.ComputeHash(memoryStream.ToArray());
+
+                return cryptoServiceProvider.Hash.Aggregate(string.Empty, (current, t) => current + t.ToString("X2"));
+            }
+        }
+        #endregion
     }
 }
