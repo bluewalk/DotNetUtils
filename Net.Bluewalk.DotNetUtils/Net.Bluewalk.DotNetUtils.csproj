@@ -13,9 +13,9 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryType>Git</RepositoryType>
     <PackageReleaseNotes>* Initial .NET Standard release</PackageReleaseNotes>
-    <Version>2019.9.26.1</Version>
-    <AssemblyVersion>2019.9.26.1</AssemblyVersion>
-    <FileVersion>2019.9.26.1</FileVersion>
+    <Version>2020.7.28.1</Version>
+    <AssemblyVersion>2020.7.28.1</AssemblyVersion>
+    <FileVersion>2020.7.28.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
