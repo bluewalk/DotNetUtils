@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Security.Cryptography;
 using System.Xml;
@@ -56,6 +58,21 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         }
 
         /// <summary>
+        /// Convert object to dictionary
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="bindingAttr"></param>
+        /// <returns></returns>
+        public static IDictionary<string, object> ToDictionary(this object source, BindingFlags bindingAttr = BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance)
+        {
+            return source.GetType().GetProperties(bindingAttr).ToDictionary
+            (
+                propInfo => propInfo.Name,
+                propInfo => propInfo.GetValue(source, null)
+            );
+        }
+
+        /// <summary>
         /// Returns the object value or default value if null
         /// </summary>
         /// <param name="str">The string.</param>
@@ -66,6 +83,22 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
             return string.IsNullOrEmpty(str) ? @default : str;
         }
 
+        /// <summary>
+        /// Get value from object by specified property name
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="property"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static T GetValue<T>(this object obj, string property)
+        {
+            if (obj == null) return default;
+
+            var prop = obj.GetType().GetProperty(property);
+            if (prop == null) return default;
+
+            return (T)prop.GetValue(obj, null);
+        }
 
         #region Hashing
 
