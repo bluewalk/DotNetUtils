@@ -6,16 +6,16 @@
     <Authors>Bluewalk</Authors>
     <Company>Bluewalk</Company>
     <Description>.NET Standard library containing handy extensions</Description>
-    <Copyright>Copyright © 2019 Bluewalk</Copyright>
+    <Copyright>Copyright © 2020 Bluewalk</Copyright>
     <PackageProjectUrl>https://github.com/bluewalk/DotNetUtils</PackageProjectUrl>
     <RepositoryUrl>https://github.com/bluewalk/DotNetUtils</RepositoryUrl>
     <PackageTags>dotnet .net core utils</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryType>Git</RepositoryType>
-    <PackageReleaseNotes>* Initial .NET Standard release</PackageReleaseNotes>
-    <Version>2019.9.26.1</Version>
-    <AssemblyVersion>2019.9.26.1</AssemblyVersion>
-    <FileVersion>2019.9.26.1</FileVersion>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <Version>2020.8.4.1</Version>
+    <AssemblyVersion>2020.8.4.1</AssemblyVersion>
+    <FileVersion>2020.8.4.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
