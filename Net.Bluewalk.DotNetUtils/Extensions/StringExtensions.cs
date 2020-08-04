@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -341,6 +342,27 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         }
 
         /// <summary>
+        /// Create SHA256 hash
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string Sha256(this string value)
+        {
+            var sb = new StringBuilder();
+
+            using (var hash = SHA256.Create())
+            {
+                var enc = Encoding.UTF8;
+                var result = hash.ComputeHash(enc.GetBytes(value));
+
+                foreach (var b in result)
+                    sb.Append(b.ToString("x2"));
+            }
+
+            return sb.ToString();
+        }
+
+        /// <summary>
         /// Returns the string value or default value if null
         /// </summary>
         /// <param name="str">The string.</param>
@@ -376,6 +398,31 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         public static string GetDigits(this string s)
         {
             return Regex.Replace(s, @"[^\d]", string.Empty);
+        }
+
+        /// <summary>
+        /// Contains function but case insensitive
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="value"></param>
+        /// <param name="stringComparison"></param>
+        /// <returns></returns>
+        public static bool CaseInsensitiveContains(this string text, string value,
+            StringComparison stringComparison = StringComparison.CurrentCultureIgnoreCase)
+        {
+            return text.IndexOf(value, stringComparison) >= 0;
+        }
+
+        /// <summary>
+        /// Replace the end of a string
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="value"></param>
+        /// <param name="replacement"></param>
+        /// <returns></returns>
+        public static string ReplaceEnd(this string source, string value, string replacement)
+        {
+            return Regex.Replace(source, $"{value}$", replacement);
         }
     }
 }
