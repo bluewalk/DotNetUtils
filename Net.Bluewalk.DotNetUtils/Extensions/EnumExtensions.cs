@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace Net.Bluewalk.DotNetUtils.Extensions
@@ -33,20 +34,20 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         }
         
         /// <summary>
-        /// Get enum items
+        /// Get enum values
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        public static List<EnumItem> GetEnumItems(Type t)
+        public static List<EnumValue> GetValues(Type t)
         {
             var values = Enum.GetValues(t);
-            var result = new List<EnumItem>();
+            var result = new List<EnumValue>();
 
             foreach (var item in values)
             {
                 var name = Enum.GetName(t, item);
 
-                result.Add(new EnumItem()
+                result.Add(new EnumValue()
                 {
                     Name = name,
                     NamePretty = Regex.Replace(name, "(?<=.)([A-Z][a-z])", " $0"),
@@ -58,19 +59,29 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         }
 
         /// <summary>
-        /// Get enum items
+        /// Get enum values
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static List<EnumItem> GetEnumItems<T>()
+        public static List<EnumValue> GetValues<T>()
         {
-            return GetEnumItems(typeof(T));
+            return GetValues(typeof(T));
         }
 
         /// <summary>
+        /// Get enum information
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static EnumInfo GetInfo<T>()
+        {
+            return new EnumInfo(typeof(T));
+        }
+        
+        /// <summary>
         /// Enum item
         /// </summary>
-        public class EnumItem
+        public class EnumValue
         {
             /// <summary>
             /// Name
@@ -86,6 +97,26 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
             /// Value
             /// </summary>
             public object Value { get; set; }
+        }
+
+        public class EnumInfo
+        {
+            public string Namespace { get; set; }
+            public string Name { get; set; }
+            public string FullName { get; set; }
+            public bool IsFlag { get; set; }
+            public List<EnumValue> Values { get; set; }
+
+            public EnumInfo(Type type)
+            {
+                if (type?.IsEnum == false) throw new ArgumentException("Only Enums are supported");
+
+                Namespace = type.Namespace;
+                Name = type.Name;
+                FullName = type.FullName;
+                Values = GetValues(type);
+                IsFlag = type.GetCustomAttribute<FlagsAttribute>() != null;
+            }
         }
     }
 }
