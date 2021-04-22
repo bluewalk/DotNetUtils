@@ -12,7 +12,7 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         /// <returns>DateTime.</returns>
         public static DateTime Round(this DateTime datetime, TimeSpan roundingInterval)
         {
-            return new DateTime((datetime - DateTime.MinValue).Round(roundingInterval).Ticks);
+            return new((datetime - DateTime.MinValue).Round(roundingInterval).Ticks);
         }
 
 
@@ -88,6 +88,7 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
             {
                 return date;
             }
+
             if (date.DayOfWeek > target)
             {
                 return date.AddDays(target - date.DayOfWeek).Date;
@@ -105,7 +106,7 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         /// <returns>The current month start date</returns>
         public static DateTime GetMonthStartDate(this DateTime date)
         {
-            return new DateTime(date.Year, date.Month, 1);
+            return new(date.Year, date.Month, 1);
         }
 
         /// <summary>

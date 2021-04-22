@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Net.Bluewalk.DotNetUtils.Extensions
 {
@@ -9,12 +10,14 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         /// Convert dictionary to specified object T
         /// </summary>
         /// <param name="source"></param>
+        /// <param name="bindingFlags"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static T ToObject<T>(this IDictionary<string, object> source)
+        public static T ToObject<T>(this IDictionary<string, object> source,
+            BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public)
             where T : class, new()
         {
-            return (T)source.ToObject(typeof(T));
+            return (T) source.ToObject(typeof(T), bindingFlags);
         }
 
         /// <summary>
@@ -22,8 +25,10 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         /// </summary>
         /// <param name="source"></param>
         /// <param name="type"></param>
+        /// <param name="bindingFlags"></param>
         /// <returns></returns>
-        public static object ToObject(this IDictionary<string, object> source, Type type)
+        public static object ToObject(this IDictionary<string, object> source, Type type,
+            BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public)
         {
             var someObject = Activator.CreateInstance(type);
             var someObjectType = someObject.GetType();
@@ -31,7 +36,7 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
             foreach (var item in source)
             {
                 someObjectType
-                    .GetProperty(item.Key)
+                    .GetProperty(item.Key, bindingFlags)
                     ?.SetValue(someObject, item.Value, null);
             }
 

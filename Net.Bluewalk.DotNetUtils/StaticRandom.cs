@@ -5,16 +5,16 @@ namespace Net.Bluewalk.DotNetUtils
 {
     public static class StaticRandom
     {
-        private static int seed;
+        private static int _seed;
 
-        private static readonly ThreadLocal<Random> threadLocal = new ThreadLocal<Random>
-            (() => new Random(Interlocked.Increment(ref seed)));
+        private static readonly ThreadLocal<Random>
+            ThreadLocal = new(() => new Random(Interlocked.Increment(ref _seed)));
 
         static StaticRandom()
         {
-            seed = Environment.TickCount;
+            _seed = Environment.TickCount;
         }
 
-        public static Random Instance { get { return threadLocal?.Value; } }
+        public static Random Instance => ThreadLocal?.Value;
     }
 }

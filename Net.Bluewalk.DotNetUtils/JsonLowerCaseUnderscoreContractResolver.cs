@@ -9,7 +9,9 @@ using System.Reflection;
 namespace Net.Bluewalk.DotNetUtils
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property)]
-    public class JsonLowerCaseUnderscoreIgnoreAttribute : Attribute { }
+    public class JsonLowerCaseUnderscoreIgnoreAttribute : Attribute
+    {
+    }
 
     public class JsonLowerCaseUnderscoreContractResolver : DefaultContractResolver
     {

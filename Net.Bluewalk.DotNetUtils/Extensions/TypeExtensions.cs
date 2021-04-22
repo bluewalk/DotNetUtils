@@ -40,7 +40,7 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
             if (!type.IsInterface)
                 return type.GetProperties();
 
-            return (new[] { type })
+            return (new[] {type})
                 .Concat(type.GetInterfaces())
                 .SelectMany(i => i.GetProperties());
         }

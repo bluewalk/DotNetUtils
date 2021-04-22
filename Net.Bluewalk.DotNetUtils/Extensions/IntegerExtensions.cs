@@ -15,8 +15,8 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         /// <returns>System.Int32.</returns>
         public static int Map(this int value, int oldFrom, int oldTo, int newFrom, int newTo)
         {
-            var scale = (double)(newTo - newFrom) / (oldTo - oldFrom);
-            return (int)Math.Ceiling(newFrom + (value - oldFrom) * scale);
+            var scale = (double) (newTo - newFrom) / (oldTo - oldFrom);
+            return (int) Math.Ceiling(newFrom + (value - oldFrom) * scale);
         }
 
         /// <summary>
