@@ -18,13 +18,13 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
             Func<TAttribute, TValue> valueSelector)
             where TAttribute : Attribute
         {
-            var att = type.GetCustomAttributes(
+            if (type.GetCustomAttributes(
                 typeof(TAttribute), true
-            ).FirstOrDefault() as TAttribute;
-            if (att != null)
+            ).FirstOrDefault() is TAttribute att)
             {
                 return valueSelector(att);
             }
+
             return default(TValue);
         }
     }

@@ -10,6 +10,7 @@ using System.Web;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 
 namespace Net.Bluewalk.DotNetUtils.Extensions
 {
@@ -124,11 +125,11 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         {
             try
             {
-                return (T)Enum.Parse(typeof(T), value);
+                return (T) Enum.Parse(typeof(T), value);
             }
             catch
             {
-                return (T)Enum.Parse(typeof(T), "Unspecified");
+                return (T) Enum.Parse(typeof(T), "Unspecified");
             }
         }
 
@@ -149,7 +150,9 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         /// <returns>System.String.</returns>
         public static string Base64Decode(this string value)
         {
-            return string.IsNullOrEmpty(value) ? string.Empty : Encoding.UTF8.GetString(Convert.FromBase64String(value));
+            return string.IsNullOrEmpty(value)
+                ? string.Empty
+                : Encoding.UTF8.GetString(Convert.FromBase64String(value));
         }
 
         /// <summary>
@@ -162,7 +165,8 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         {
             if (string.IsNullOrEmpty(value)) return defaultValue;
 
-            if (!double.TryParse(value.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out var result))
+            if (!double.TryParse(value.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture,
+                out var result))
                 if (!double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out result))
                     result = defaultValue;
 
@@ -239,7 +243,8 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
             if (string.IsNullOrEmpty(value)) return false;
 
             value = value.Trim();
-            if ((!value.StartsWith("{") || !value.EndsWith("}")) &&
+            if ((!value.StartsWith("\"") || !value.EndsWith("\"")) &&
+                (!value.StartsWith("{") || !value.EndsWith("}")) &&
                 (!value.StartsWith("[") || !value.EndsWith("]"))) return false;
 
             try
@@ -257,17 +262,32 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         /// Convert JSON string to object.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="value">The value.</param>
-        /// <returns>T.</returns>
-        public static T DeserializeJson<T>(this string value)
+        /// <param name="value"></param>
+        /// <param name="resolver"></param>
+        /// <returns></returns>
+        public static T DeserializeJson<T>(this string value, IContractResolver resolver)
         {
             return JsonConvert.DeserializeObject<T>(
                 value,
                 new JsonSerializerSettings
                 {
-                    ContractResolver = new JsonLowerCaseUnderscoreContractResolver()
+                    ContractResolver = resolver
                 }
             );
+        }
+
+        /// <summary>
+        /// Convert JSON string to object.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value">The value.</param>
+        /// <param name="lowerCaseUnderscore"></param>
+        /// <returns>T.</returns>
+        public static T DeserializeJson<T>(this string value, bool lowerCaseUnderscore = false)
+        {
+            return value.DeserializeJson<T>(lowerCaseUnderscore
+                ? new JsonLowerCaseUnderscoreContractResolver()
+                : new DefaultContractResolver());
         }
 
         /// <summary>
@@ -280,8 +300,22 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         {
             var ser = new XmlSerializer(typeof(T));
 
-            using (var sr = new StringReader(value))
-                return (T)ser.Deserialize(sr);
+            using var sr = new StringReader(value);
+            return (T) ser.Deserialize(sr);
+        }
+
+        /// <summary>
+        /// Populates the object from json.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="target"></param>
+        /// <param name="resolver"></param>
+        public static void PopulateObjectFromJson(this string value, object target, IContractResolver resolver)
+        {
+            JsonConvert.PopulateObject(value, target, new JsonSerializerSettings
+            {
+                ContractResolver = resolver
+            });
         }
 
         /// <summary>
@@ -289,12 +323,27 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         /// </summary>
         /// <param name="value">The value.</param>
         /// <param name="target">The target.</param>
-        public static void PopulateObjectFromJson(this string value, object target)
+        /// <param name="lowerCaseUnderscore"></param>
+        public static void PopulateObjectFromJson(this string value, object target, bool lowerCaseUnderscore = false)
         {
-            JsonConvert.PopulateObject(value, target, new JsonSerializerSettings
+            value.PopulateObjectFromJson(target, lowerCaseUnderscore
+                ? new JsonLowerCaseUnderscoreContractResolver()
+                : new DefaultContractResolver());
+        }
+
+        /// <summary>
+        /// Casts the specified JObject to given type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value"></param>
+        /// <param name="resolver"></param>
+        /// <returns></returns>
+        public static T Cast<T>(this JObject value, IContractResolver resolver)
+        {
+            return value.ToObject<T>(JsonSerializer.Create(new JsonSerializerSettings
             {
-                ContractResolver = new JsonLowerCaseUnderscoreContractResolver()
-            });
+                ContractResolver = resolver
+            }));
         }
 
         /// <summary>
@@ -302,13 +351,13 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="value">The value.</param>
+        /// <param name="lowerCaseUnderscore"></param>
         /// <returns>T.</returns>
-        public static T Cast<T>(this JObject value)
+        public static T Cast<T>(this JObject value, bool lowerCaseUnderscore = false)
         {
-            return value.ToObject<T>(JsonSerializer.Create(new JsonSerializerSettings
-            {
-                ContractResolver = new JsonLowerCaseUnderscoreContractResolver()
-            }));
+            return value.Cast<T>(lowerCaseUnderscore
+                ? new JsonLowerCaseUnderscoreContractResolver()
+                : new DefaultContractResolver());
         }
 
         /// <summary>
@@ -350,14 +399,12 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         {
             var sb = new StringBuilder();
 
-            using (var hash = SHA256.Create())
-            {
-                var enc = Encoding.UTF8;
-                var result = hash.ComputeHash(enc.GetBytes(value));
+            using var hash = SHA256.Create();
+            var enc = Encoding.UTF8;
+            var result = hash.ComputeHash(enc.GetBytes(value));
 
-                foreach (var b in result)
-                    sb.Append(b.ToString("x2"));
-            }
+            foreach (var b in result)
+                sb.Append(b.ToString("x2"));
 
             return sb.ToString();
         }
@@ -387,6 +434,7 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
                 if (c < '0' || c > '9')
                     return false;
             }
+
             return true;
         }
 

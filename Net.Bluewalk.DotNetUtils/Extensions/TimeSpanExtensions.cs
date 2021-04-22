@@ -13,9 +13,9 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         /// <returns>TimeSpan.</returns>
         public static TimeSpan Round(this TimeSpan time, TimeSpan roundingInterval, MidpointRounding roundingType)
         {
-            return new TimeSpan(
+            return new(
                 Convert.ToInt64(Math.Round(
-                    time.Ticks / (decimal)roundingInterval.Ticks,
+                    time.Ticks / (decimal) roundingInterval.Ticks,
                     roundingType
                 )) * roundingInterval.Ticks
             );
@@ -50,7 +50,7 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         /// <returns>TimeSpan.</returns>
         public static TimeSpan StripMilliseconds(this TimeSpan time)
         {
-            return new TimeSpan(time.Days, time.Hours, time.Minutes, time.Seconds);
+            return new(time.Days, time.Hours, time.Minutes, time.Seconds);
         }
     }
 }

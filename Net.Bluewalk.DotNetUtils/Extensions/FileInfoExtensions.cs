@@ -33,6 +33,5 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
             //file is not locked
             return false;
         }
-
     }
 }

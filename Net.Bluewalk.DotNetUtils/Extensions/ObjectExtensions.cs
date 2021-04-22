@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.IO;
@@ -9,50 +8,58 @@ using System.Runtime.Serialization;
 using System.Security.Cryptography;
 using System.Xml;
 using System.Xml.Serialization;
-using Formatting = Newtonsoft.Json.Formatting;
 
 namespace Net.Bluewalk.DotNetUtils.Extensions
 {
     public static class ObjectExtensions
     {
         /// <summary>
-        /// To json.
+        /// Convert object to JSON
         /// </summary>
-        /// <param name="value">The value.</param>
-        /// <param name="lowerCaseUnderscore">Use lower_case_underscore format</param>
-        /// <returns>System.String.</returns>
-        public static string ToJson(this object value, bool lowerCaseUnderscore = true)
+        /// <param name="value"></param>
+        /// <param name="resolver"></param>
+        /// <returns></returns>
+        public static string ToJson(this object value, IContractResolver resolver)
         {
             return JsonConvert.SerializeObject(
                 value,
                 new JsonSerializerSettings
                 {
-                    ContractResolver = lowerCaseUnderscore ? new JsonLowerCaseUnderscoreContractResolver() : new DefaultContractResolver(),
+                    ContractResolver = resolver,
                     DateTimeZoneHandling = DateTimeZoneHandling.Local,
-                    Formatting = Formatting.None,
+                    Formatting = Newtonsoft.Json.Formatting.None,
                     ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                 });
         }
 
         /// <summary>
-        /// To XML.
+        /// Convert object to JSON
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="lowerCaseUnderscore">Use lower_case_underscore format</param>
+        /// <returns>System.String.</returns>
+        public static string ToJson(this object value, bool lowerCaseUnderscore = false)
+        {
+            return value.ToJson(lowerCaseUnderscore
+                ? new JsonLowerCaseUnderscoreContractResolver()
+                : new DefaultContractResolver());
+        }
+
+        /// <summary>
+        /// Convert object to XML.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>System.String.</returns>
         public static string ToXml(this object value)
         {
-            string xml;
-
-            using (var sw = new StringWriter())
+            using var sw = new StringWriter();
+            using (var tw = new XmlTextWriter(sw))
             {
-                using (var tw = new XmlTextWriter(sw))
-                {
-                    var ser = new XmlSerializer(value.GetType());
-                    ser.Serialize(tw, value);
-                }
-
-                xml = sw.ToString();
+                var ser = new XmlSerializer(value.GetType());
+                ser.Serialize(tw, value);
             }
+
+            var xml = sw.ToString();
 
             return xml;
         }
@@ -63,7 +70,8 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         /// <param name="source"></param>
         /// <param name="bindingAttr"></param>
         /// <returns></returns>
-        public static IDictionary<string, object> ToDictionary(this object source, BindingFlags bindingAttr = BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance)
+        public static IDictionary<string, object> ToDictionary(this object source,
+            BindingFlags bindingAttr = BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance)
         {
             return source.GetType().GetProperties(bindingAttr).ToDictionary
             (
@@ -97,7 +105,7 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
             var prop = obj.GetType().GetProperty(property);
             if (prop == null) return default;
 
-            return (T)prop.GetValue(obj, null);
+            return (T) prop.GetValue(obj, null);
         }
 
         #region Hashing
@@ -143,7 +151,7 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         /// <returns></returns>
         public static string GetKeyedHash<T>(this object instance, byte[] key) where T : KeyedHashAlgorithm, new()
         {
-            var cryptoServiceProvider = new T { Key = key };
+            var cryptoServiceProvider = new T {Key = key};
             return ComputeHash(instance, cryptoServiceProvider);
         }
 
@@ -157,14 +165,13 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         private static string ComputeHash<T>(object instance, T cryptoServiceProvider) where T : HashAlgorithm, new()
         {
             var serializer = new DataContractSerializer(instance.GetType());
-            using (var memoryStream = new MemoryStream())
-            {
-                serializer.WriteObject(memoryStream, instance);
-                cryptoServiceProvider.ComputeHash(memoryStream.ToArray());
+            using var memoryStream = new MemoryStream();
+            serializer.WriteObject(memoryStream, instance);
+            cryptoServiceProvider.ComputeHash(memoryStream.ToArray());
 
-                return cryptoServiceProvider.Hash.Aggregate(string.Empty, (current, t) => current + t.ToString("X2"));
-            }
+            return cryptoServiceProvider.Hash.Aggregate(string.Empty, (current, t) => current + t.ToString("X2"));
         }
+
         #endregion
     }
 }
