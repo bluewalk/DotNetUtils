@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Net.Bluewalk.DotNetUtils.Extensions
 {
-    public static class INumerableExtensions
+    public static class IEnumerableExtensions
     {
         /// <summary>
         /// Loops through every item.
