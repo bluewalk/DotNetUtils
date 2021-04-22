@@ -7,20 +7,20 @@
     <Authors>Bluewalk</Authors>
     <Company>Bluewalk</Company>
     <Description>.NET Standard library containing handy extensions</Description>
-    <Copyright>Copyright © 2020 Bluewalk</Copyright>
+    <Copyright>Copyright © 2021 Bluewalk</Copyright>
     <PackageProjectUrl>https://github.com/bluewalk/DotNetUtils</PackageProjectUrl>
     <RepositoryUrl>https://github.com/bluewalk/DotNetUtils</RepositoryUrl>
     <PackageTags>dotnet .net core utils</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryType>Git</RepositoryType>
     <PackageReleaseNotes></PackageReleaseNotes>
-    <Version>2020.8.4.2</Version>
-    <AssemblyVersion>2020.8.4.2</AssemblyVersion>
-    <FileVersion>2020.8.4.2</FileVersion>
+    <Version>2021.4.22.1</Version>
+    <AssemblyVersion>2021.4.22.1</AssemblyVersion>
+    <FileVersion>2021.4.22.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
   <!-- .NET Standard 2.0 references, compilation flags and build options -->

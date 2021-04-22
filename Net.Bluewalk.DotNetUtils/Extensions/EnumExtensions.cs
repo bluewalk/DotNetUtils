@@ -18,7 +18,7 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         {
             return parameters.Contains(value);
         }
-        
+
         /// <summary>
         /// Determines if enum flags overlap another enum flags
         /// </summary>
@@ -32,7 +32,7 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
 
             return values.Any(v => a.HasFlag(v) && b.HasFlag(v));
         }
-        
+
         /// <summary>
         /// Get enum values
         /// </summary>
@@ -75,9 +75,9 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         /// <returns></returns>
         public static EnumInfo GetInfo<T>()
         {
-            return new EnumInfo(typeof(T));
+            return new(typeof(T));
         }
-        
+
         /// <summary>
         /// Enum item
         /// </summary>
