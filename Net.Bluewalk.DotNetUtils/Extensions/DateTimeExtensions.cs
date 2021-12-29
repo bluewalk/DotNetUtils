@@ -77,12 +77,12 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         }
 
         /// <summary>
-        /// Get the closet date for target DayOfWeek
+        /// Get the closest date for target DayOfWeek
         /// </summary>
         /// <param name="date">The original date</param>
         /// <param name="target">The target of DayOfWeek</param>
         /// <returns>The closet date which is target day of week</returns>
-        public static DateTime GetClosetDate(this DateTime date, DayOfWeek target)
+        public static DateTime GetClosestDate(this DateTime date, DayOfWeek target)
         {
             if (date.DayOfWeek == target)
             {

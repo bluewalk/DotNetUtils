@@ -210,6 +210,34 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         }
 
         /// <summary>
+        /// Convert string to Decimal.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="defaultValue">The default value.</param>
+        /// <returns>System.Double.</returns>
+        public static decimal ToDecimcal(this string value, decimal defaultValue)
+        {
+            if (string.IsNullOrEmpty(value)) return defaultValue;
+
+            if (!decimal.TryParse(value.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture,
+                    out var result))
+                if (!decimal.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out result))
+                    result = defaultValue;
+
+            return result;
+        }
+
+        /// <summary>
+        /// Convert string to Double.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>System.Double.</returns>
+        public static decimal ToDecimcal(this string value)
+        {
+            return ToDecimcal(value, 0);
+        }
+
+        /// <summary>
         /// String to NameValueCollection.
         /// </summary>
         /// <param name="value">The value.</param>
