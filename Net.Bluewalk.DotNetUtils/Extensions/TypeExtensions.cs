@@ -44,5 +44,50 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
                 .Concat(type.GetInterfaces())
                 .SelectMany(i => i.GetProperties());
         }
+
+        /// <summary>
+        /// Get the parent types
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static IEnumerable<Type> GetParentTypes(this Type type)
+        {
+            // is there any base type?
+            if (type == null)
+            {
+                yield break;
+            }
+
+            // return all implemented or inherited interfaces
+            foreach (var i in type.GetInterfaces())
+            {
+                yield return i;
+            }
+
+            // return all inherited types
+            var currentBaseType = type.BaseType;
+            while (currentBaseType != null)
+            {
+                yield return currentBaseType;
+                currentBaseType = currentBaseType.BaseType;
+            }
+        }
+
+        /// <summary>
+        /// Checks if type implements given interface
+        /// </summary>
+        /// <typeparam name="TInterface"></typeparam>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public static bool Implements<TInterface>(this Type type) where TInterface : class
+        {
+            var interfaceType = typeof(TInterface);
+
+            if (!interfaceType.IsInterface)
+                throw new InvalidOperationException("Only interfaces can be implemented.");
+
+            return (interfaceType.IsAssignableFrom(type));
+        }
     }
 }

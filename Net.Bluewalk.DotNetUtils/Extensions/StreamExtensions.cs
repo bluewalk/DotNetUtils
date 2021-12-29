@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Threading.Tasks;
 
 namespace Net.Bluewalk.DotNetUtils.Extensions
 {
@@ -38,6 +39,19 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
 
             using var reader = new StreamReader(value);
             return reader.ReadToEnd();
+        }
+
+        /// <summary>
+        /// Reads to string.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static async Task<string> ReadToStringAsync(this Stream value)
+        {
+            if (value == null)
+                return null;
+            using var streamReader = new StreamReader(value);
+            return await streamReader.ReadToEndAsync();
         }
     }
 }
