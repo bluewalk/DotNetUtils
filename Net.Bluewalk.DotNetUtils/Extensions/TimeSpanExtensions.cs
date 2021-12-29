@@ -52,5 +52,20 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         {
             return new(time.Days, time.Hours, time.Minutes, time.Seconds);
         }
+        
+        /// <summary>
+        /// Rounds the specific TimeSpan to nearest minute
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="minutes"></param>
+        /// <returns></returns>
+        public static TimeSpan RoundToNearestMinutes(this TimeSpan input, int minutes)
+        {
+            var halfRange = new TimeSpan(0, minutes / 2, 0);
+            if (input.Ticks < 0)
+                halfRange = halfRange.Negate();
+            var totalMinutes = (int)(input + halfRange).TotalMinutes;
+            return new TimeSpan(0, totalMinutes - totalMinutes % minutes, 0);
+        }
     }
 }
