@@ -7,14 +7,14 @@
     <Authors>Bluewalk</Authors>
     <Company>Bluewalk</Company>
     <Description>.NET Standard library containing handy extensions</Description>
-    <Copyright>Copyright © 2021 Bluewalk</Copyright>
+    <Copyright>Copyright © 2022 Bluewalk</Copyright>
     <PackageProjectUrl>https://github.com/bluewalk/DotNetUtils</PackageProjectUrl>
     <RepositoryUrl>https://github.com/bluewalk/DotNetUtils</RepositoryUrl>
     <PackageTags>dotnet .net core utils</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryType>Git</RepositoryType>
     <PackageReleaseNotes></PackageReleaseNotes>
-    <Version>2021.12.29.1</Version>
+    <Version>2022.1.10.1</Version>
     <AssemblyVersion>2021.4.22.1</AssemblyVersion>
     <FileVersion>2021.4.22.1</FileVersion>
   </PropertyGroup>
