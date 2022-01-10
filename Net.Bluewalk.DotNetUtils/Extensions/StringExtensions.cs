@@ -120,16 +120,36 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="value">The value.</param>
+        /// <param name="defaultValue">Default value, by default set to Unspecified</param>
         /// <returns>T.</returns>
-        public static T ToEnumValue<T>(this string value)
+        public static T ToEnumValue<T>(this string value, string defaultValue = "Unspecified")
         {
             try
             {
-                return (T) Enum.Parse(typeof(T), value);
+                return (T) Enum.Parse(typeof(T), value, false);
             }
             catch
             {
-                return (T) Enum.Parse(typeof(T), "Unspecified");
+                return (T) Enum.Parse(typeof(T), defaultValue, false);
+            }
+        }
+
+        /// <summary>
+        /// Returns matching Enum value.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value">The value.</param>
+        /// <param name="defaultValue"></param>
+        /// <returns>T.</returns>
+        public static T ToEnumValue<T>(this string value, T defaultValue)
+        {
+            try
+            {
+                return (T)Enum.Parse(typeof(T), value, false);
+            }
+            catch
+            {
+                return defaultValue;
             }
         }
 
