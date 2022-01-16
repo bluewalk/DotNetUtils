@@ -126,11 +126,11 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         {
             try
             {
-                return (T) Enum.Parse(typeof(T), value, false);
+                return (T) Enum.Parse(typeof(T), value, true);
             }
             catch
             {
-                return (T) Enum.Parse(typeof(T), defaultValue, false);
+                return (T) Enum.Parse(typeof(T), defaultValue, true);
             }
         }
 
@@ -145,7 +145,7 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         {
             try
             {
-                return (T)Enum.Parse(typeof(T), value, false);
+                return (T)Enum.Parse(typeof(T), value, true);
             }
             catch
             {
