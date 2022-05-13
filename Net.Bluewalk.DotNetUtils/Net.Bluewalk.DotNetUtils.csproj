@@ -14,9 +14,9 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryType>Git</RepositoryType>
     <PackageReleaseNotes></PackageReleaseNotes>
-    <Version>2022.1.16.1</Version>
-    <AssemblyVersion>2022.1.16.1</AssemblyVersion>
-    <FileVersion>2022.1.16.1</FileVersion>
+    <Version>2022.5.13.1</Version>
+    <AssemblyVersion>2022.5.13.1</AssemblyVersion>
+    <FileVersion>2022.5.13.1</FileVersion>
     <PackageVersion>2022.1.16.1</PackageVersion>
   </PropertyGroup>
 
