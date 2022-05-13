@@ -126,11 +126,11 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         {
             try
             {
-                return (T) Enum.Parse(typeof(T), value, true);
+                return (T)Enum.Parse(typeof(T), value, true);
             }
             catch
             {
-                return (T) Enum.Parse(typeof(T), defaultValue, true);
+                return (T)Enum.Parse(typeof(T), defaultValue, true);
             }
         }
 
@@ -186,7 +186,7 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
             if (string.IsNullOrEmpty(value)) return defaultValue;
 
             if (!double.TryParse(value.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture,
-                out var result))
+                    out var result))
                 if (!double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out result))
                     result = defaultValue;
 
@@ -349,7 +349,7 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
             var ser = new XmlSerializer(typeof(T));
 
             using var sr = new StringReader(value);
-            return (T) ser.Deserialize(sr);
+            return (T)ser.Deserialize(sr);
         }
 
         /// <summary>
@@ -519,6 +519,38 @@ namespace Net.Bluewalk.DotNetUtils.Extensions
         public static string ReplaceEnd(this string source, string value, string replacement)
         {
             return Regex.Replace(source, $"{value}$", replacement);
+        }
+
+        /// <summary>
+        /// Converts a string to a timespan
+        ///  eg 1m = 00:01:00, 2h = 02:00:00, 3h50m = 03:50:00
+        ///  qualifiers are: [d]ays, [h]ours, [m]inutes, [s]econds, [ms]econds
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static TimeSpan ToTimeSpan(this string value)
+        {
+            var matches = Regex.Matches(value, "(?<number>[0-9]+)(?<qualifier>[dhms]+)", RegexOptions.IgnoreCase);
+            if (matches.Count == 0) return TimeSpan.Zero;
+
+            var result = TimeSpan.Zero;
+
+            foreach (Match match in matches)
+            {
+                var number = Convert.ToInt32(match.Groups["number"].Value);
+
+                result = result.Add(match.Groups["qualifier"].Value.ToLower() switch
+                {
+                    "d" => TimeSpan.FromDays(number),
+                    "h" => TimeSpan.FromHours(number),
+                    "m" => TimeSpan.FromMinutes(number),
+                    "s" => TimeSpan.FromSeconds(number),
+                    "ms" => TimeSpan.FromMilliseconds(number),
+                    _ => TimeSpan.Zero
+                });
+            }
+
+            return result;
         }
     }
 }
