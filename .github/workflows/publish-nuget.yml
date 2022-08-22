@@ -13,7 +13,7 @@ jobs:
 
       - name: publish on version change
         id: publish_nuget
-        uses: brandedoutcast/publish-nuget@v2.5.5
+        uses: alirezanet/publish-nuget@v3.0.4
         with:
           PROJECT_FILE_PATH: Net.Bluewalk.DotNetUtils/Net.Bluewalk.DotNetUtils.csproj
           NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
